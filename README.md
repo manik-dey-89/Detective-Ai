@@ -5,9 +5,9 @@ A premium-quality, AI-powered detective mystery game with procedural case genera
 ## 🎮 Features
 
 ### Core Gameplay
-- **AI-Generated Cases**: Every case is unique and procedurally generated using OpenAI + procedural fallback engine
+- **AI-Generated Cases**: Every case is unique and procedurally generated using OpenRouter (GPT-4o-mini/Claude-3-Opus) + procedural fallback engine
 - **Multiple Endings**: Player decisions lead to different outcomes
-- **NPC Memory System**: NPCs remember conversations, lies, threats, and accusations using Cognee
+- **NPC Memory System**: NPCs remember conversations, lies, threats, and accusations using Cognee cloud memory
 - **Natural Language Interrogation**: Talk to suspects and witnesses naturally
 - **Dynamic Clue Generation**: Clues adapt to player progress
 - **Case Similarity Check**: New cases are compared to previous ones and regenerated if too similar (>20%)
@@ -33,8 +33,8 @@ A premium-quality, AI-powered detective mystery game with procedural case genera
 ### Backend (Node.js + Express + TypeScript)
 - **RESTful API**: Clean, modular API structure
 - **TypeScript**: Full type safety
-- **Cognee Integration**: Isolated long-term memory for each detective (one brain per detective)
-- **OpenAI Integration**: Case generation and dialogue
+- **Cognee Integration**: Isolated long-term memory for each detective (one brain per detective) using Cognee cloud
+- **OpenRouter Integration**: Case generation and dialogue using GPT-4o-mini or Claude-3-Opus
 - **SQLite Database**: Persistent storage for players, cases, and memories
 - **Security**: Helmet, CORS, rate limiting
 
@@ -137,9 +137,9 @@ detective-ai/
 ## �📦 Installation
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 20+ 
 - npm or yarn
-- OpenAI API key (optional, uses procedural fallback if not available)
+- OpenRouter API key (optional, uses procedural fallback if not available)
 - Cognee API key (optional, uses local memory cache if not available)
 
 ### Backend Setup
@@ -170,10 +170,26 @@ Frontend runs on `http://localhost:5173` (or next available port if in use)
 ```
 PORT=5000
 NODE_ENV=development
-OPENAI_API_KEY=your_openai_api_key
-COGNEE_API_KEY=your_cognee_api_key
-COGNEE_PROJECT_ID=your_cognee_project_id
+
+# LLM Provider Configuration
+LLM_PROVIDER=openrouter
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+OPENROUTER_MODEL=openai/gpt-4o-mini
+
+# Fallback to OpenAI (if LLM_PROVIDER=openai)
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4-turbo-preview
+
+# Cognee Memory Configuration
+COGNEE_API_KEY=your_cognee_api_key_here
+COGNEE_BASE_URL=https://api.cognee.ai
+
+# Frontend URL
 FRONTEND_URL=http://localhost:5173
+
+# Database Configuration
+DATABASE_URL=sqlite:./data/detective_ai.db
 ```
 
 ### Frontend (.env)
@@ -255,18 +271,50 @@ VITE_API_URL=http://localhost:5000
 
 ## 🚀 Deployment
 
-### Backend
+### Render Deployment (Recommended)
+
+The project includes a `render.yaml` configuration for easy deployment on Render.com.
+
+**Backend Service:**
+- Runtime: Node.js
+- Build: `npm install && npm run build`
+- Start: `npm start`
+- Port: 10000
+- Environment Variables: Set OPENROUTER_API_KEY and COGNEE_API_KEY in Render dashboard
+
+**Frontend Service:**
+- Runtime: Static Site
+- Build: `npm install && npm run build`
+- Publish Path: `dist`
+- SPA Rewrite: All routes redirect to index.html
+
+To deploy:
+1. Push your code to GitHub
+2. Create a new web service on Render
+3. Connect your GitHub repository
+4. Use the existing `render.yaml` configuration
+5. Set required environment variables in Render dashboard
+
+### Manual Deployment
+
+#### Backend
 ```bash
 cd backend
 npm run build
 npm start
 ```
 
-### Frontend
+#### Frontend
 ```bash
 cd frontend
 npm run build
 # Deploy dist/ folder to your hosting service
+```
+
+### Docker Deployment
+
+```bash
+docker-compose up -d
 ```
 
 ## 📝 Development
