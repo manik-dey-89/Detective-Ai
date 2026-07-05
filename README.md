@@ -32,11 +32,11 @@ A premium-quality, AI-powered detective mystery game with procedural case genera
 
 ### Backend (Node.js + Express + TypeScript)
 - **RESTful API**: Clean, modular API structure
-- **TypeScript**: Full type safety
+- **TypeScript**: Full type safety with latest TypeScript version
 - **Cognee Integration**: Isolated long-term memory for each detective (one brain per detective) using Cognee cloud
 - **OpenRouter Integration**: Case generation and dialogue using GPT-4o-mini or Claude-3-Opus
 - **SQLite Database**: Persistent storage for players, cases, and memories
-- **Security**: Helmet, CORS, rate limiting
+- **Security**: Helmet, CORS, rate limiting, trust proxy for Render deployment
 
 ### Frontend (React + Vite + TypeScript)
 - **Modern UI**: Dark cinematic theme with glassmorphism
@@ -137,7 +137,7 @@ detective-ai/
 ## �📦 Installation
 
 ### Prerequisites
-- Node.js 20+ 
+- Node.js 22+ (Render uses Node.js 22.x)
 - npm or yarn
 - OpenRouter API key (optional, uses procedural fallback if not available)
 - Cognee API key (optional, uses local memory cache if not available)
@@ -276,11 +276,12 @@ VITE_API_URL=http://localhost:5000
 The project includes a `render.yaml` configuration for easy deployment on Render.com.
 
 **Backend Service:**
-- Runtime: Node.js
+- Runtime: Node.js 22.x
 - Build: `npm install && npm run build`
 - Start: `npm start`
 - Port: 10000
 - Environment Variables: Set OPENROUTER_API_KEY and COGNEE_API_KEY in Render dashboard
+- **Important**: The backend includes `app.set("trust proxy", 1)` to handle Render's proxy headers correctly
 
 **Frontend Service:**
 - Runtime: Static Site
@@ -294,6 +295,11 @@ To deploy:
 3. Connect your GitHub repository
 4. Use the existing `render.yaml` configuration
 5. Set required environment variables in Render dashboard
+
+**Deployment Notes:**
+- TypeScript is configured with `ignoreDeprecations: "6.0"` to silence moduleResolution warnings
+- CommonJS module system is used for Node.js compatibility
+- Express trust proxy is enabled for Render's load balancer
 
 ### Manual Deployment
 
