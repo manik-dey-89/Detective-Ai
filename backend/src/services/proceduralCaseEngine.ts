@@ -115,7 +115,7 @@ function uniqueName(used: Set<string>, culture: typeof CULTURES[0]): string {
   return `${pick(culture.first)} ${pick(culture.last)}-${uuidv4().slice(0, 4)}`;
 }
 
-function validateCase(caseData: Omit<Case, 'id' | 'playerId' | 'createdAt' | 'status'>): { valid: boolean; errors: string[] } {
+export function validateCase(caseData: Omit<Case, 'id' | 'playerId' | 'createdAt' | 'status'>): { isValid: boolean; errors: string[] } {
   const errors: string[] = [];
   const forbiddenPlaceholders = ['Unknown', 'N/A', 'undefined', 'null', 'adversary'];
 
@@ -178,7 +178,7 @@ function validateCase(caseData: Omit<Case, 'id' | 'playerId' | 'createdAt' | 'st
   }
 
   return {
-    valid: errors.length === 0,
+    isValid: errors.length === 0,
     errors
   };
 }
@@ -563,7 +563,7 @@ export function generateProceduralCase(params: {
   // Validate the generated case and regenerate missing fields if needed
   const validation = validateCase(generatedCase);
   const forbiddenPlaceholders = ['Unknown', 'N/A', 'undefined', 'null', 'adversary'];
-  if (!validation.valid) {
+  if (!validation.isValid) {
     // Regenerate only the missing fields
     if (!generatedCase.victim.name || forbiddenPlaceholders.includes(generatedCase.victim.name)) {
       generatedCase.victim.name = uniqueName(usedNames, culture);
