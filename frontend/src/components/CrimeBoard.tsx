@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Network, Plus, Trash2, Link as LinkIcon } from 'lucide-react';
+import { Network, Trash2, Link as LinkIcon } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 interface BoardItem {
@@ -12,13 +12,6 @@ interface BoardItem {
   name: string;
   description: string;
   color: string;
-}
-
-interface BoardConnection {
-  id: string;
-  from: string;
-  to: string;
-  description: string;
 }
 
 interface CrimeBoardProps {
@@ -115,17 +108,17 @@ export default function CrimeBoard({
   );
 
   const handleDragStart = (event: DragStartEvent) => {
-    setActiveId(event.active.id);
+    setActiveId(String(event.active.id));
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveId(null);
 
-    if (over && active.id !== over.id) {
+    if (over && String(active.id) !== String(over.id)) {
       setItems(items => {
-        const oldIndex = items.findIndex(item => item.id === active.id);
-        const newIndex = items.findIndex(item => item.id === over.id);
+        const oldIndex = items.findIndex(item => item.id === String(active.id));
+        const newIndex = items.findIndex(item => item.id === String(over.id));
         return arrayMove(items, oldIndex, newIndex);
       });
     }

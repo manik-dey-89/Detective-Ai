@@ -6,10 +6,19 @@ import { cn } from '../lib/utils';
 import { useGameStore } from '../lib/store';
 import { playerApi } from '../lib/api';
 
+interface PlayerSettings {
+  difficulty: 'easy' | 'medium' | 'hard' | 'expert';
+  soundEnabled: boolean;
+  musicEnabled: boolean;
+  autoSave: boolean;
+  notifications: boolean;
+  theme: 'dark' | 'light';
+}
+
 export default function Settings() {
   const navigate = useNavigate();
   const { player, setPlayer } = useGameStore();
-  const [settings, setSettings] = useState(player?.settings || {
+  const [settings, setSettings] = useState<PlayerSettings>(player?.settings || {
     difficulty: 'medium',
     soundEnabled: true,
     musicEnabled: true,
@@ -37,8 +46,10 @@ export default function Settings() {
     }
   };
 
-  const toggleSetting = (key: keyof typeof settings) => {
-    setSettings({ ...settings, [key]: !settings[key as any] });
+  const toggleSetting = (key: keyof PlayerSettings) => {
+    if (typeof settings[key] === 'boolean') {
+      setSettings({ ...settings, [key]: !settings[key] as boolean });
+    }
   };
 
   return (

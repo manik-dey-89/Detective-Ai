@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Search, Loader2 } from 'lucide-react';
+import { Search } from 'lucide-react';
 
 interface LoadingScreenProps {
   message?: string;

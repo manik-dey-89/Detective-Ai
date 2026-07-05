@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Brain, Search, Filter, Trash2, Edit, ArrowLeft, Calendar, Tag } from 'lucide-react';
+import { Brain, Search, ArrowLeft, Calendar, Tag } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useGameStore } from '../lib/store';
 import { memoryApi } from '../lib/api';
