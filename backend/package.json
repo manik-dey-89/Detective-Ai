@@ -4,7 +4,7 @@
   "description": "Backend API for Detective AI game",
   "main": "dist/server.js",
   "engines": {
-    "node": ">=20.0.0"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
